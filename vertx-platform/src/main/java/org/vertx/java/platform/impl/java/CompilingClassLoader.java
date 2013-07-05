@@ -43,8 +43,8 @@ public class CompilingClassLoader extends ClassLoader {
   public CompilingClassLoader(ClassLoader loader, String sourceName) {
     super(loader);
     URL resource = getResource(sourceName);
-    if(resource == null) {
-      throw new RuntimeException("Resource not found: " + sourceName);
+    if (resource == null) {
+      throw new RuntimeException("Resource not found in classpath or application root directory: " + sourceName);
     }
     //Need to urldecode it too, since bug in JDK URL class which does not url decode it, so if it contains spaces you are screwed
     File sourceFile;
