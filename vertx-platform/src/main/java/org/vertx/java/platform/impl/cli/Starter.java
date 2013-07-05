@@ -70,6 +70,7 @@ public class Starter {
         if (sargs.length < 2) {
           displaySyntax();
         } else {
+          checkLogging();
           String operand = sargs[1];
           switch (command) {
             case "run":
@@ -96,6 +97,20 @@ public class Starter {
         }
       }
     }
+  }
+
+  private void checkLogging()
+  {
+    String loggingFile = System.getProperty("java.util.logging.config.file");
+	  if (loggingFile == null)
+	  {
+		  System.out.println("WARNING: The property 'java.util.logging.config.file' has not been set to identify the logging.properties file - subsequent logging may not occur" );
+	  }
+	  File file = new File(loggingFile);
+	  if (!file.exists())
+	  {
+		  System.out.println("The file specified by the property 'java.util.logging.config.file' does not exist - subsequent logging may not occur");
+	  }
   }
 
   private static <T> AsyncResultHandler<T> createLoggingHandler(final String successMessage, final Handler<AsyncResult<T>> doneHandler) {
