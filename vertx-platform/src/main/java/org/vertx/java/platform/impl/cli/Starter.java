@@ -216,7 +216,7 @@ public class Starter {
         instances = Integer.parseInt(sinstances);
 
         if (instances != -1 && instances < 1) {
-          log.error("Invalid number of instances");
+          log.error("Invalid number of vert.x instances specified - the value must be -1 or a number greater than 0");
           displaySyntax();
           return;
         }
@@ -237,11 +237,11 @@ public class Starter {
         try {
           conf = new JsonObject(sconf);
         } catch (DecodeException e) {
-          log.error("Configuration file does not contain a valid JSON object");
+          log.error("Configuration file specified does not contain a valid JSON object");
           return;
         }
       } catch (FileNotFoundException e) {
-        log.error("Config file " + configFile + " does not exist");
+        log.error("Configuration file " + configFile + " could not be found");
         return;
       }
     } else {
