@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2011-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,10 +51,13 @@ public class CompilingClassLoader extends ClassLoader {
     try {
       sourceFile = new File(URLDecoder.decode(resource.getFile(), "UTF-8"));
     } catch (UnsupportedEncodingException e) {
-      throw new IllegalStateException("Failed to decode " + e.getMessage());
+      throw new IllegalStateException("Failed to decode file" + ((sourceFile != null)?(" "+sourceFile.getAbsolutePath()):"") + ": " + e.getMessage());
+    }
+    if (!sourceFile.exists()) {
+      throw new RuntimeException("File not found: " + sourceFile.getAbsolutePath() + " current directory is: " + new File(".").getAbsolutePath());
     }
     if (!sourceFile.canRead()) {
-      throw new RuntimeException("File not found: " + sourceFile.getAbsolutePath() + " current dir is: " + new File(".").getAbsolutePath());
+        throw new RuntimeException("File not accessible: " + sourceFile.getAbsolutePath());
     }
 
     this.javaSourceContext = new JavaSourceContext(sourceFile);
@@ -77,10 +80,10 @@ public class CompilingClassLoader extends ClassLoader {
         for (Diagnostic<?> d : diagnostics.getDiagnostics()) {
           log.warn(d);
         }
-        throw new RuntimeException("Compilation failed!");
+        throw new RuntimeException("Compilation failed");
       }
     } catch (Exception e) {
-      throw new RuntimeException("Compilation failed", e);
+      throw new RuntimeException("Compilation failed for an unknown reason", e);
     }
   }
 
